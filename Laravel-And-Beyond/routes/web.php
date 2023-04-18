@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MemberController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,3 +16,6 @@ use App\Http\Controllers\HomeController;
 */
 
 Route::get('/', [HomeController::class, 'show'])->name('home');
+Route::get('/members/show', [MemberController::class, 'show'])->name('members.show');
+Route::get('/member/create', [MemberController::class, 'create'])->name('member.create');
+Route::post('/member/store', [MemberController::class, 'store'])->name('member.store');
