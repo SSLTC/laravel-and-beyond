@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Member;
+use DateTime;
+use Illuminate\Http\RedirectResponse;
 
 class MemberController extends Controller
 {
@@ -21,13 +23,25 @@ class MemberController extends Controller
         return view('membercreate');
     }
 
-    public function store()
+    public function store(): RedirectResponse
     {
         $data = request()->validate([
             'name' => 'required',
-            'registration' => '',
         ]);
 
-        Member::create($data);
+        //Member::create($data);
+        Member::create([
+            'name' => request()->name,
+            'registration' => now()->format('Y-m-d'),
+        ]);
+
+        return redirect(route('members.show'));
+    }
+
+    public function destroy($id): RedirectResponse
+    {
+        Member::destroy($id);
+
+        return redirect(route('members.show'));
     }
 }
