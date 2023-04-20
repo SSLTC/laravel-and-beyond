@@ -9,18 +9,18 @@ use Illuminate\Http\RedirectResponse;
 
 class MemberController extends Controller
 {
-    public function show()
+    public function index()
     {
         $members = Member::all();
 
-        return view('members', [
+        return view('member.index', [
             "members" => $members
         ]);
     }
 
     public function create()
     {
-        return view('membercreate');
+        return view('member.create');
     }
 
     public function store(): RedirectResponse
@@ -35,13 +35,33 @@ class MemberController extends Controller
             'registration' => now()->format('Y-m-d'),
         ]);
 
-        return redirect(route('members.show'));
+        return redirect(route('member.index'));
+    }
+
+    public function edit($id)
+    {
+        $member = Member::find($id);
+        return view('member.edit', ['member' => $member]);
+    }
+
+    public function patch(Request $request, $id)
+    {
+        $data = request()->validate([
+            'name' => 'required',
+        ]);
+
+        Member::where('id', $id)->update([
+            'name' => request()->name,
+            //'registration' => now()->format('Y-m-d'),
+        ]);
+
+        return redirect(route('member.index'));
     }
 
     public function destroy($id): RedirectResponse
     {
         Member::destroy($id);
 
-        return redirect(route('members.show'));
+        return redirect(route('member.index'));
     }
 }
